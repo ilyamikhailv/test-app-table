@@ -1,0 +1,34 @@
+<table class="table">
+  @for (row of cells; track rowIndex; let rowIndex = $index) {
+  <tr>
+    @for (cell of row; track colIndex; let colIndex = $index ) {
+    <td
+      [class.focused]="focusedRow === rowIndex && focusedCol === colIndex"
+      (click)="enterEditMode(rowIndex, colIndex)"
+    >
+      @if (cell.type === 'text') {
+      <input
+        [attr.id]="'input-' + rowIndex + '-' + colIndex"
+        [(ngModel)]="cell.value"
+        #inputField
+        (keydown)="handleInputKeydown($event, inputField)"
+      />
+      } @if (cell.type === 'select') {
+      <select
+        [attr.id]="'input-' + rowIndex + '-' + colIndex"
+        [(ngModel)]="cell.value"
+        #selectField
+        (keydown)="handleInputKeydown($event, selectField)"
+      >
+        @for (option of cell.options; track option;) {
+        <option [value]="option">{{ option }}</option>
+        }
+      </select>
+      } @if(cell.type === 'value') {
+      {{ cell.value }}
+      }
+    </td>
+    }
+  </tr>
+  }
+</table>
